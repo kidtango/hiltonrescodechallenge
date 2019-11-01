@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import Review from './Review';
 import SelectHotelForm from './SelectHotelForm';
 import AddGuestsForm from './AddGuestsForm';
+import Reservations from './Reservations';
 
 function Copyright() {
   return (
@@ -142,6 +143,8 @@ export default function MakeReservation() {
             )}
           </React.Fragment>
         </Paper>
+
+        <Reservations />
         <Copyright />
       </main>
     </React.Fragment>
