@@ -1,10 +1,12 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import uuidv4 from 'uuid/v4';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Context from '../../context';
+import CustomizedSnackbars from '../utils/Snackbar';
 
 const useStyles = makeStyles(theme => ({
   buttons: {
@@ -19,11 +21,18 @@ const useStyles = makeStyles(theme => ({
 
 const AddGuestsForm = () => {
   const classes = useStyles();
-  const { dispatch } = useContext(Context);
+  const { state, dispatch } = useContext(Context);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  console.log('TCL: AddGuestsForm -> setLastName', lastName);
-  console.log('TCL: AddGuestsForm -> setFirstName', firstName);
+  const [isDisabled, setDisableButton] = useState(false);
+
+  useEffect(() => {
+    if (firstName === '' || lastName === '') {
+      setDisableButton(true);
+    } else {
+      setDisableButton(false);
+    }
+  });
 
   const handleFirstNameChange = ({ target }) => {
     setFirstName(target.value);
@@ -34,11 +43,14 @@ const AddGuestsForm = () => {
   };
 
   const handleAddGuest = () => {
-    let guest = { firstName, lastName };
-    console.log('TCL: handleAddGuest -> guest', guest);
+    dispatch({ type: 'OPEN_SNACKBAR', payload: true });
+    const guest = { id: uuidv4(), first_name: firstName, last_name: lastName };
     dispatch({ type: 'ADD_GUEST', payload: guest });
     setFirstName('');
     setLastName('');
+    setTimeout(() => {
+      dispatch({ type: 'CLOSE_SNACKBAR', payload: false });
+    }, 2000);
   };
   return (
     <>
@@ -73,9 +85,11 @@ const AddGuestsForm = () => {
         variant='contained'
         className={classes.button}
         onClick={handleAddGuest}
+        disabled={isDisabled}
       >
         Add
       </Button>
+      <CustomizedSnackbars />
     </>
   );
 };

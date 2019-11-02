@@ -7,7 +7,8 @@ const Context = createContext({
   departureDate: null,
   guests: [],
   hotelName: null,
-  reservations: []
+  reservations: [],
+  isSnackbarOpen: false
 });
 
 export default Context;

@@ -20,10 +20,20 @@ export default function reducer(state, { type, payload }) {
     case 'SELECT_HOTEL':
       return { ...state, hotelName: payload };
     case 'ADD_GUEST':
-      // const newGuest = payload;
       const existingGuests = state.guests;
       const newGuest = payload;
       return { ...state, guests: [...existingGuests, newGuest] };
+    case 'REMOVE_GUEST':
+      const removedGuestId = payload;
+      const updatedGuests = state.guests.filter(
+        guest => guest.id !== removedGuestId
+      );
+      return { ...state, guests: [...updatedGuests] };
+    case 'OPEN_SNACKBAR':
+      return { ...state, isSnackbarOpen: true };
+    case 'CLOSE_SNACKBAR':
+      return { ...state, isSnackbarOpen: false };
+
     default:
       return state;
   }

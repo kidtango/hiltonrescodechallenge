@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Paper from '@material-ui/core/Paper';
@@ -82,6 +82,29 @@ export default function MakeReservation() {
 
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
+  const [isDisabled, setDisableButton] = useState(false);
+
+  useEffect(() => {
+    if (activeStep === 2) {
+      const { guests, arrivalDate, departureDate, hotelName } = state;
+      if (
+        guests.length < 1 ||
+        arrivalDate === null ||
+        departureDate === null ||
+        hotelName === ''
+      ) {
+        setDisableButton(true);
+      } else {
+        setDisableButton(false);
+      }
+    }
+  });
+
+  useEffect(() => {
+    if (!(activeStep === 2)) {
+      setDisableButton(false);
+    }
+  });
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -131,6 +154,7 @@ export default function MakeReservation() {
                     color='primary'
                     onClick={handleNext}
                     className={classes.button}
+                    disabled={isDisabled}
                   >
                     {activeStep === steps.length - 1 ? 'Book' : 'Next'}
                   </Button>
@@ -140,7 +164,7 @@ export default function MakeReservation() {
           </React.Fragment>
         </Paper>
 
-        <Reservations />
+        {/* <Reservations /> */}
         <Copyright />
       </main>
     </React.Fragment>
