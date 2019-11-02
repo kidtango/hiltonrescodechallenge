@@ -66,7 +66,7 @@ const styles = theme => ({
   },
 
   icon: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing(),
     color: 'white',
     fontSize: 45
   },
@@ -76,7 +76,7 @@ const styles = theme => ({
   picture: {
     height: '50px',
     borderRadius: '90%',
-    marginRight: theme.spacing.unit * 2
+    marginRight: theme.spacing(1)
   }
 });
 

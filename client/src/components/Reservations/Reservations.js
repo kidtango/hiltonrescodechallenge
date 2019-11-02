@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import MatLink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,6 +8,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import Context from '../../context';
+import { format } from 'date-fns';
 
 function createData(resId, arrivalDate, departureDate, hotelName, guestName) {
   return { resId, arrivalDate, departureDate, hotelName, guestName };
@@ -39,7 +40,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Reservations() {
+  const { state } = useContext(Context);
+  const { arrivalDate } = state;
+
   const classes = useStyles();
+
   return (
     <Paper className={classes.paper}>
       <Typography component='h2' variant='h6' gutterBottom>
@@ -57,9 +62,9 @@ export default function Reservations() {
         </TableHead>
         <TableBody>
           {rows.map(row => (
-            <TableRow key={row.id}>
+            <TableRow key={row.resId}>
               <TableCell>
-                <Link style={{ textDecoration: 'none' }} to={row.id}>
+                <Link style={{ textDecoration: 'none' }} to='1'>
                   {row.resId}
                 </Link>
               </TableCell>
@@ -72,7 +77,7 @@ export default function Reservations() {
         </TableBody>
       </Table>
       <div className={classes.seeMore}>
-        <Link color='primary' href='javascript:;'>
+        <Link color='primary' to='1'>
           See more reservations
         </Link>
       </div>

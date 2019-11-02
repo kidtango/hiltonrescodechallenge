@@ -1,5 +1,5 @@
 import 'date-fns';
-import React from 'react';
+import React, { useContext } from 'react';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import {
@@ -7,13 +7,15 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker
 } from '@material-ui/pickers';
+import Context from '../../context';
 
 export default function DepartureDatePicker() {
-  // The first commit of Material-UI
+  const { dispatch } = useContext(Context);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
 
   const handleDateChange = date => {
     setSelectedDate(date);
+    dispatch({ type: 'PICK_DEPARTURE_DATE', payload: date });
   };
 
   return (

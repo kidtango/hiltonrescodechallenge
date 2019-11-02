@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Redirect } from 'react-router-dom';
 import { GoogleLogout } from 'react-google-login';
 import { withStyles } from '@material-ui/core/styles';
 import Context from '../../context';

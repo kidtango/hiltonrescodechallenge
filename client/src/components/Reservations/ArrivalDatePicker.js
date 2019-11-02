@@ -1,19 +1,20 @@
+import React, { useContext, useState } from 'react';
 import 'date-fns';
-import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker
 } from '@material-ui/pickers';
+import Context from '../../context';
 
 export default function ArrivalDatePicker() {
-  // The first commit of Material-UI
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const { state, dispatch } = useContext(Context);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handleDateChange = date => {
     setSelectedDate(date);
+    dispatch({ type: 'PICK_ARRIVAL_DATE', payload: date });
   };
 
   return (

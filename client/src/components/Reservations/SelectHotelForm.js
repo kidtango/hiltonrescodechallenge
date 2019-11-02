@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import ArrivalDatePicker from './ArrivalDatePicker';
 import DepartureDatePicker from './DepatureDatePicker';
+import Context from '../../context';
+
 const SelectHotelForm = () => {
+  const { state, dispatch } = useContext(Context);
+  const [selectedHotel, setHotel] = useState('');
+  console.log('TCL: SelectHotelForm -> selectedHotel', selectedHotel);
+
+  const onHandleChange = ({ target }) => {
+    // console.log('TCL: SelectHotelForm -> hotelName', e.target.value);
+    setHotel(target.value);
+    dispatch({ type: 'SELECT_HOTEL', payload: target.value });
+  };
+
   return (
-    <React.Fragment>
+    <>
       <Typography variant='h6' gutterBottom>
         Select Your Hotel
       </Typography>
@@ -20,7 +30,9 @@ const SelectHotelForm = () => {
             id='hotelName'
             name='hotelName'
             label='Hotel Name'
+            value={selectedHotel}
             fullWidth
+            onChange={onHandleChange}
           />
         </Grid>
 
@@ -31,7 +43,7 @@ const SelectHotelForm = () => {
           <DepartureDatePicker />
         </Grid>
       </Grid>
-    </React.Fragment>
+    </>
   );
 };
 
