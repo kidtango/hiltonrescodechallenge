@@ -54,7 +54,7 @@ export default function ListOfGuests() {
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                      primary={guest.first_name + ' ' + guest.last_name}
+                      primary={guest.firstName + ' ' + guest.lastName}
                     />
                     <ListItemSecondaryAction>
                       <IconButton

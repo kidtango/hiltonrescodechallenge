@@ -44,13 +44,13 @@ const AddGuestsForm = () => {
 
   const handleAddGuest = () => {
     dispatch({ type: 'OPEN_SNACKBAR', payload: true });
-    const guest = { id: uuidv4(), first_name: firstName, last_name: lastName };
+    const guest = { id: uuidv4(), firstName, lastName };
     dispatch({ type: 'ADD_GUEST', payload: guest });
     setFirstName('');
     setLastName('');
     setTimeout(() => {
       dispatch({ type: 'CLOSE_SNACKBAR', payload: false });
-    }, 2000);
+    }, 1500);
   };
   return (
     <>

@@ -20,10 +20,32 @@ module.exports = gql`
     guests: [Guest]
     hotelName: String
     arrivalDate: String
-    depatureDate: String
+    departureDate: String
+    creator: User
+  }
+
+  input createReservationInput {
+    hotelName: String
+    departureDate: String
+    arrivalDate: String
+    guests: [ID]
+  }
+
+  input createGuestInput {
+    firstName: String!
+    lastName: String!
+    reservationID: ID!
   }
 
   type Query {
     me: User
+    getReservations: [Reservation]
+    getReservation: Reservation
+  }
+
+  type Mutation {
+    createReservation(input: createReservationInput!): Reservation
+    deleteReservation(input: ID!): Reservation
+    createGuest(input: createGuestInput!): Guest
   }
 `;

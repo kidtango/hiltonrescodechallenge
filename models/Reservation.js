@@ -5,11 +5,8 @@ const ReservationSchema = new mongoose.Schema(
     hotelName: String,
     arrivalDate: String,
     depatureDate: String,
-    guests: [
-      {
-        guest: { type: mongoose.SchemaObjectId, ref: 'Guest' }
-      }
-    ]
+    creator: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    guests: [{ type: mongoose.Schema.ObjectId, ref: 'Guest' }]
   },
   { timestamp: true }
 );

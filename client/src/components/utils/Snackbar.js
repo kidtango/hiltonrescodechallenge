@@ -93,15 +93,15 @@ const useStyles2 = makeStyles(theme => ({
 export default function CustomizedSnackbars() {
   const classes = useStyles2();
   const [open, setOpen] = React.useState(false);
-  const { state } = useContext(Context);
+  const { state, dispatch } = useContext(Context);
   const { isSnackbarOpen } = state;
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
-      return;
+      dispatch({ type: 'CLOSE_SNACKBAR', payload: false });
     }
 
-    setOpen(false);
+    dispatch({ type: 'CLOSE_SNACKBAR', payload: false });
   };
 
   return (
