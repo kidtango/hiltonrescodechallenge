@@ -21,18 +21,21 @@ export default function reducer(state, { type, payload }) {
       return { ...state, hotelName: payload };
     case 'ADD_GUEST':
       const existingGuests = state.guests;
-      const newGuest = payload;
+      const newGuest = payload.createGuest;
       return { ...state, guests: [...existingGuests, newGuest] };
     case 'REMOVE_GUEST':
       const removedGuestId = payload;
+      console.log('TCL: reducer -> payload', payload);
       const updatedGuests = state.guests.filter(
-        guest => guest.createGuest._id !== removedGuestId
+        guest => guest._id !== removedGuestId
       );
       return { ...state, guests: [...updatedGuests] };
     case 'OPEN_SNACKBAR':
       return { ...state, isSnackbarOpen: true };
     case 'CLOSE_SNACKBAR':
       return { ...state, isSnackbarOpen: false };
+    case 'ADD_RESERVATIONS':
+      return { ...state, reservations: payload };
 
     default:
       return state;

@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 
 const AddGuestsForm = () => {
   const classes = useStyles();
-  const { state, dispatch } = useContext(Context);
+  const { dispatch } = useContext(Context);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isDisabled, setDisableButton] = useState(false);
@@ -47,6 +47,7 @@ const AddGuestsForm = () => {
 
   const handleAddGuest = async e => {
     try {
+      setDisableButton(true);
       e.preventDefault();
       const guest = { firstName, lastName };
       const newGuest = await client.request(CREATE_GUEST_MUTATION, guest);
@@ -57,6 +58,7 @@ const AddGuestsForm = () => {
       setTimeout(() => {
         dispatch({ type: 'CLOSE_SNACKBAR', payload: false });
       }, 1500);
+      setDisableButton(false);
     } catch (error) {
       console.log(error);
     }

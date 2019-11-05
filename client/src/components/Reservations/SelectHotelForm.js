@@ -10,7 +10,6 @@ import Context from '../../context';
 const SelectHotelForm = () => {
   const { state, dispatch } = useContext(Context);
   const [selectedHotel, setHotel] = useState('');
-  console.log('TCL: SelectHotelForm -> selectedHotel', selectedHotel);
 
   const onHandleChange = ({ target }) => {
     // console.log('TCL: SelectHotelForm -> hotelName', e.target.value);

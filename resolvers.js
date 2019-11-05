@@ -11,7 +11,13 @@ const authenticated = next => (root, args, ctx, info) => {
 
 module.exports = {
   Query: {
-    me: authenticated((root, args, ctx) => ctx.currentUser)
+    me: authenticated((root, args, ctx) => ctx.currentUser),
+    getReservations: async (root, args, ctx) => {
+      const reservations = await Reservation.find({})
+        .populate('creator')
+        .populate('guests');
+      return reservations;
+    }
   },
   Mutation: {
     createGuest: authenticated(async (root, { input }, ctx) => {

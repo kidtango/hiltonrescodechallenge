@@ -24,6 +24,7 @@ export const CREATE_RESERVATION_MUTATION = `
       departureDate
       hotelName
       createdAt
+      _id
       creator {
         _id
         name

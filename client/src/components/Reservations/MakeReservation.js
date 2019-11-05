@@ -15,6 +15,7 @@ import Reservations from './Reservations';
 import Context from '../../context';
 import { useClient } from '../../graphql/client';
 import { CREATE_RESERVATION_MUTATION } from '../../graphql/mutations';
+import { GET_RESERVATIONS_QUERY } from '../../graphql/queries';
 
 function Copyright() {
   return (
@@ -37,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2),
     marginTop: theme.spacing(15),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 600,
+      width: 800,
       marginLeft: 'auto',
       marginRight: 'auto'
     }
@@ -88,6 +89,7 @@ export default function MakeReservation() {
   const client = useClient();
 
   const { arrivalDate, departureDate, hotelName, guests } = state;
+  const { reservations } = state;
 
   useEffect(() => {
     if (activeStep === 2) {
@@ -102,37 +104,41 @@ export default function MakeReservation() {
         setDisableButton(false);
       }
     }
-  });
+  }, []);
 
   useEffect(() => {
     if (!(activeStep === 2)) {
       setDisableButton(false);
     }
-  });
+  }, []);
+
+  useEffect(() => {
+    getReservations();
+  }, []);
+
+  const getReservations = async () => {
+    const returnRes = await client.request(GET_RESERVATIONS_QUERY);
+    const reservations = returnRes.getReservations;
+    console.log('TCL: MakeReservation -> reservations', reservations);
+    dispatch({ type: 'ADD_RESERVATIONS', payload: reservations });
+  };
 
   const handleNext = async () => {
     try {
       if (activeStep === 2) {
         const guestIds = [];
         guests.forEach(guest => {
-          guestIds.push(guest.createGuest._id);
+          guestIds.push(guest._id);
         });
-        console.log(guestIds);
         const Reservation = {
           arrivalDate,
           departureDate,
           hotelName,
           guests: guestIds
         };
-        const newReservation = await client.request(
-          CREATE_RESERVATION_MUTATION,
-          Reservation
-        );
-        console.log('TCL: handleNext -> newReservation', newReservation);
-        setTimeout(() => {
-          console.log('loading...');
-          setActiveStep(activeStep + 1);
-        }, 1500);
+        await client.request(CREATE_RESERVATION_MUTATION, Reservation);
+        getReservations();
+        setActiveStep(activeStep + 1);
       } else {
         setActiveStep(activeStep + 1);
       }
@@ -168,7 +174,8 @@ export default function MakeReservation() {
                   Thank you for your reservation.
                 </Typography>
                 <Typography variant='subtitle1'>
-                  Your reservation number is #2001539.
+                  Your reservation number is #
+                  {reservations[reservations.length - 1]._id}.
                 </Typography>
               </React.Fragment>
             ) : (
@@ -195,7 +202,7 @@ export default function MakeReservation() {
           </React.Fragment>
         </Paper>
 
-        {/* <Reservations /> */}
+        <Reservations />
         <Copyright />
       </main>
     </React.Fragment>
