@@ -23,7 +23,7 @@ module.exports = {
     }),
     createReservation: authenticated(async (root, { input }, ctx) => {
       console.log('TCL: ctx', ctx.currentUser._id);
-      console.log('TCL: input', input.guests[0]);
+      console.log('TCL: input', input);
 
       const newReservation = await new Reservation({
         hotelName: input.hotelName,

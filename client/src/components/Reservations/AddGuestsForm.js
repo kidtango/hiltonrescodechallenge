@@ -7,6 +7,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Context from '../../context';
 import CustomizedSnackbars from '../utils/Snackbar';
+import { useClient } from '../../graphql/client';
+import { CREATE_GUEST_MUTATION } from '../../graphql/mutations';
 
 const useStyles = makeStyles(theme => ({
   buttons: {
@@ -25,6 +27,7 @@ const AddGuestsForm = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isDisabled, setDisableButton] = useState(false);
+  const client = useClient();
 
   useEffect(() => {
     if (firstName === '' || lastName === '') {
@@ -42,18 +45,24 @@ const AddGuestsForm = () => {
     setLastName(target.value);
   };
 
-  const handleAddGuest = () => {
-    dispatch({ type: 'OPEN_SNACKBAR', payload: true });
-    const guest = { id: uuidv4(), firstName, lastName };
-    dispatch({ type: 'ADD_GUEST', payload: guest });
-    setFirstName('');
-    setLastName('');
-    setTimeout(() => {
-      dispatch({ type: 'CLOSE_SNACKBAR', payload: false });
-    }, 1500);
+  const handleAddGuest = async e => {
+    try {
+      e.preventDefault();
+      const guest = { firstName, lastName };
+      const newGuest = await client.request(CREATE_GUEST_MUTATION, guest);
+      dispatch({ type: 'OPEN_SNACKBAR', payload: true });
+      dispatch({ type: 'ADD_GUEST', payload: newGuest });
+      setFirstName('');
+      setLastName('');
+      setTimeout(() => {
+        dispatch({ type: 'CLOSE_SNACKBAR', payload: false });
+      }, 1500);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
-    <>
+    <form>
       <Typography variant='h6' gutterBottom>
         Add Guests
       </Typography>
@@ -82,6 +91,7 @@ const AddGuestsForm = () => {
         </Grid>
       </Grid>
       <Button
+        type='submit'
         variant='contained'
         className={classes.button}
         onClick={handleAddGuest}
@@ -90,7 +100,7 @@ const AddGuestsForm = () => {
         Add
       </Button>
       <CustomizedSnackbars />
-    </>
+    </form>
   );
 };
 

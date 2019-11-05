@@ -26,7 +26,7 @@ export default function reducer(state, { type, payload }) {
     case 'REMOVE_GUEST':
       const removedGuestId = payload;
       const updatedGuests = state.guests.filter(
-        guest => guest.id !== removedGuestId
+        guest => guest.createGuest._id !== removedGuestId
       );
       return { ...state, guests: [...updatedGuests] };
     case 'OPEN_SNACKBAR':

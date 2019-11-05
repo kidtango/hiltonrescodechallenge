@@ -33,8 +33,8 @@ export default function ListOfGuests() {
   const { state, dispatch } = useContext(Context);
   const { guests } = state;
 
-  const onHandleRemove = ({ id }) => {
-    dispatch({ type: 'REMOVE_GUEST', payload: id });
+  const onHandleRemove = ({ _id }) => {
+    dispatch({ type: 'REMOVE_GUEST', payload: _id });
   };
 
   return (
@@ -47,20 +47,24 @@ export default function ListOfGuests() {
                 <Typography color='error'>Please add guest(s)</Typography>
               ) : (
                 guests.map(guest => (
-                  <ListItem key={guest.id}>
+                  <ListItem key={guest.createGuest._id}>
                     <ListItemAvatar>
                       <Avatar>
                         <Person />
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                      primary={guest.firstName + ' ' + guest.lastName}
+                      primary={
+                        guest.createGuest.firstName +
+                        ' ' +
+                        guest.createGuest.lastName
+                      }
                     />
                     <ListItemSecondaryAction>
                       <IconButton
                         edge='end'
                         aria-label='delete'
-                        onClick={() => onHandleRemove(guest)}
+                        onClick={() => onHandleRemove(guest.createGuest)}
                       >
                         <DeleteIcon color='error' />
                       </IconButton>

@@ -34,7 +34,6 @@ module.exports = gql`
   input createGuestInput {
     firstName: String!
     lastName: String!
-    reservationID: ID!
   }
 
   type Query {

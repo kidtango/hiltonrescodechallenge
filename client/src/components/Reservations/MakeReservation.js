@@ -13,6 +13,8 @@ import SelectHotelForm from './SelectHotelForm';
 import AddGuestsForm from './AddGuestsForm';
 import Reservations from './Reservations';
 import Context from '../../context';
+import { useClient } from '../../graphql/client';
+import { CREATE_RESERVATION_MUTATION } from '../../graphql/mutations';
 
 function Copyright() {
   return (
@@ -30,6 +32,7 @@ function Copyright() {
 const useStyles = makeStyles(theme => ({
   layout: {
     width: 'auto',
+    overflow: 'hidden',
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     marginTop: theme.spacing(15),
@@ -79,14 +82,15 @@ function getStepContent(step) {
 
 export default function MakeReservation() {
   const { state, dispatch } = useContext(Context);
-
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [isDisabled, setDisableButton] = useState(false);
+  const client = useClient();
+
+  const { arrivalDate, departureDate, hotelName, guests } = state;
 
   useEffect(() => {
     if (activeStep === 2) {
-      const { guests, arrivalDate, departureDate, hotelName } = state;
       if (
         guests.length < 1 ||
         arrivalDate === null ||
@@ -106,8 +110,35 @@ export default function MakeReservation() {
     }
   });
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
+  const handleNext = async () => {
+    try {
+      if (activeStep === 2) {
+        const guestIds = [];
+        guests.forEach(guest => {
+          guestIds.push(guest.createGuest._id);
+        });
+        console.log(guestIds);
+        const Reservation = {
+          arrivalDate,
+          departureDate,
+          hotelName,
+          guests: guestIds
+        };
+        const newReservation = await client.request(
+          CREATE_RESERVATION_MUTATION,
+          Reservation
+        );
+        console.log('TCL: handleNext -> newReservation', newReservation);
+        setTimeout(() => {
+          console.log('loading...');
+          setActiveStep(activeStep + 1);
+        }, 1500);
+      } else {
+        setActiveStep(activeStep + 1);
+      }
+    } catch (error) {
+      console.log('TCL: handleNext -> error', error);
+    }
   };
 
   const handleBack = () => {

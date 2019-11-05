@@ -8,9 +8,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <Grid container spacing={3}>
-        <MakeReservation />
-      </Grid>
+      <MakeReservation />
     </>
   );
 };
